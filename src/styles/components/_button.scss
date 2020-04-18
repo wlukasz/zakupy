@@ -1,25 +1,3 @@
-// Big Button
-.big-button {
-  background: $purple;
-  border: none;
-  border-bottom: .6rem solid darken($purple, 10%);
-  color: white;
-  font-weight: bold;
-  font-size: $l-size;
-  margin-bottom: $m-size;
-  padding: 2.4rem;
-  width: 100%;
-}
-
-.big-button:disabled {
-  opacity: .5;
-}
-
-@media (min-width: $desktop-breakpoint) {
-  .big-button {
-    margin-bottom: $xl-size;
-  }
-}
 
 // Other Buttons
 .button {

@@ -8,7 +8,7 @@ const Options = (props) => (
       className="button button--link"  
       onClick={props.handleToggleView}
     >
-      Toggle View
+      {props.selected ? 'All Items' : 'This Shopping Trip'}
     </button>
       <button
         className="button button--link"  
@@ -36,6 +36,7 @@ const Options = (props) => (
             key={shop+option} 
             shopText={shop}
             optionText={option}
+            checked={checked}
             count={index + 1} 
             handleDeleteOption={props.handleDeleteOption}
             handleCheck={props.handleCheck}

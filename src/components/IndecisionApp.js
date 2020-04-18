@@ -1,9 +1,7 @@
 import React from 'react'
 import AddOption from './AddOption'
-import Action from './Action'
 import Header from './Header'
 import Options from './Options'
-import OptionModal from './OptionModal'
 
 export default class IndecisionApp extends React.Component {
   state = {
@@ -17,19 +15,9 @@ export default class IndecisionApp extends React.Component {
     // which is optional for one-line returns and we don't use it here
     this.setState(() => ({ options: []}))
   }
-  handleClickOkay = () => {
-    this.setState(() => ({ selectedOption: undefined }))
-  }
   handleDeleteOption = (optionToRemove, shopToRemove) => {
     this.setState((prevState) => ({
       options: prevState.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
-    }))
-  }
-  handlePick = () => {
-    const randomNum = Math.floor(Math.random() * this.state.options.length)
-    const option = this.state.options[randomNum]
-    this.setState(() => ({
-      selectedOption: option
     }))
   }
   handleCheck = (optionCheck, shopCheck) => {
@@ -43,12 +31,6 @@ export default class IndecisionApp extends React.Component {
     }))
   }
   handleToggleView = () => {
-    if (this.state.selected === false) {
-      // only show selected
-    } else {
-      // show all
-    }
-
     this.setState((prevState) => ({
       selected: !prevState.selected
     }))
@@ -87,10 +69,8 @@ export default class IndecisionApp extends React.Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    // if (this.state.selected === false) {
-      const json = JSON.stringify(this.state.options)
-      localStorage.setItem('options', json)
-    // }
+    const json = JSON.stringify(this.state.options)
+    localStorage.setItem('options', json)
   }
   componentWillUnmount() {
     console.log('componentWillUnmount!')
@@ -103,10 +83,6 @@ export default class IndecisionApp extends React.Component {
       <div>
         <Header subTitle={subTitle} />                                                    
         <div className="container">
-          <Action 
-            hasOptions={this.state.options.length > 0} 
-            handlePick={this.handlePick}
-          />
           <div className="widget">
             <Options 
               options={this.state.options}
@@ -123,10 +99,6 @@ export default class IndecisionApp extends React.Component {
             }
           </div>
         </div>
-        <OptionModal 
-          selectedOption={this.state.selectedOption }
-          handleClickOkay={this.handleClickOkay}
-        />
       </div>
     )
   }
