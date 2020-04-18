@@ -1,14 +1,14 @@
 {
   "name": "indecision-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "author": "Wojciech Lukaszewicz",
   "license": "MIT",
   "scripts": {
     "serve": "live-server public/",
     "build-dev": "webpack --mode=development --watch",
     "build-prod": "webpack -p --env production",
-    "start": "webpack -p --env production",
+    "start": "webpack --mode=production",
     "dev-server": "webpack-dev-server"
   },
   "dependencies": {
