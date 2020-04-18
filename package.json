@@ -24,6 +24,7 @@
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-modal": "^3.10.1",
+    "react-swipe-to-delete-ios": "^1.0.4",
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "validator": "^11.1.0",

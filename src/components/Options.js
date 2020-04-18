@@ -1,4 +1,5 @@
 import React from 'react'
+import SwipeToDelete from 'react-swipe-to-delete-ios'
 import Option from './Option'
 
 const Options = (props) => (
@@ -32,15 +33,27 @@ const Options = (props) => (
       })
       .map(({ option, shop, checked }, index) => 
         { return (props.selected && checked || !props.selected) &&
+          <SwipeToDelete
+            key={shop+option}
+            onDelete={(e) => {
+              props.handleDeleteOption(option, shop)
+            }}
+            height={88} // required
+            // optional
+            transitionDuration={250} // default
+            deleteWidth={75} // default
+            deleteText='Remove' // default
+          >
           <Option 
             key={shop+option} 
             shopText={shop}
             optionText={option}
             checked={checked}
             count={index + 1} 
-            handleDeleteOption={props.handleDeleteOption}
+            // handleDeleteOption={props.handleDeleteOption}
             handleCheck={props.handleCheck}
           />
+          </SwipeToDelete>
         }
       )
     }
