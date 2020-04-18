@@ -1,7 +1,7 @@
 {
   "name": "indecision-app",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "author": "Wojciech Lukaszewicz",
   "license": "MIT",
   "scripts": {
