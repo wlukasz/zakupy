@@ -8,6 +8,7 @@
     "serve": "live-server public/",
     "build-dev": "webpack --mode=development --watch",
     "build-prod": "webpack --mode=production",
+    "start": "webpack --mode=production",
     "dev-server": "webpack-dev-server"
   },
   "dependencies": {
