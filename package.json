@@ -8,8 +8,8 @@
     "serve": "live-server public/",
     "build-dev": "webpack --mode=development --watch",
     "build-prod": "webpack -p --env production",
-    "start": "node src/app.js",
-    "dev-server": "webpack-dev-server"
+    "start": "node server.js",
+    "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
