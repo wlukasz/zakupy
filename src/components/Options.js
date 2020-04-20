@@ -23,9 +23,9 @@ const Options = (props) => (
     {
       props.options
       .sort((a, b) => {
-        if (a.shop.toLowerCase() < b.shop.toLowerCase()) {
+        if (a.shop+a.option < b.shop+b.option) {
           return -1
-        } else if (a.shop.toLowerCase() > b.shop.toLowerCase()) {
+        } else if (a.shop+a.option > b.shop+b.option) {
           return 1
         } else {
           return 0

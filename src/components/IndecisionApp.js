@@ -36,12 +36,11 @@ export default class IndecisionApp extends React.Component {
     }))
   }
   handleAddOption = ({ option, shop }) => {
-    const item = option
-    const where = shop
+    const item = option.toLowerCase()
+    const where = shop.toLowerCase() || 'elsewhere'
+    console.log('shop:', shop.length)
     if (!option) {
       return 'Enter valid value to add item'
-    } else if (!shop) {
-      shop = 'Elsewhere'
     } else if (this.state.options.find(({ option, shop }) => {
         return item === option && where === shop
       })) {
@@ -50,7 +49,7 @@ export default class IndecisionApp extends React.Component {
 
     const checked = false
     this.setState((prevState) => ({ 
-      options: prevState.options.concat([{ option, shop, checked }]) 
+      options: prevState.options.concat([{ option: item, shop: where, checked }]) 
     }))
   }
 
