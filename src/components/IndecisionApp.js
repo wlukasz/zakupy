@@ -38,6 +38,7 @@ export default class IndecisionApp extends React.Component {
     }))
     if (this.state.selected) {
       this.resetShops(this.state.options)
+      this.filterShop('')
     }
   }
   handleToggleView = () => {
