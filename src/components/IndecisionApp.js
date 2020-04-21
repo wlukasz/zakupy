@@ -10,10 +10,12 @@ export default class IndecisionApp extends React.Component {
     selectedOption: undefined
   }
   handleDeleteOptions = () => {
-    // Return value (an object) is wrapped in parenthesis 'cos otherwise
-    // the curly braces would be treated as a wrapper for function body,
-    // which is optional for one-line returns and we don't use it here
-    this.setState(() => ({ options: []}))
+    if (confirm('Warning: This will permanently remove all items.\n Note: To remove just one item swipe it to the left.')) {
+      // Return value (an object) is wrapped in parenthesis 'cos otherwise
+      // the curly braces would be treated as a wrapper for function body,
+      // which is optional for one-line returns and we don't use it here
+      this.setState(() => ({ options: []}))
+    }
   }
   handleDeleteOption = (optionToRemove, shopToRemove) => {
     this.setState((prevState) => ({
