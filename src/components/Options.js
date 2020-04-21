@@ -9,8 +9,10 @@ const Options = (props) => {
   <div>
     <OptionsHeader 
       selected={props.selected}
+      uniqueShops={props.uniqueShops}
       handleToggleView={props.handleToggleView}
       handleDeleteOptions={props.handleDeleteOptions}
+      filterShop={props.filterShop} 
     />
 
     {props.options.length === 0 && <p className="widget__message">Please add items to get started!</p>}
@@ -25,7 +27,9 @@ const Options = (props) => {
         }
       })
       .map(({ option, shop, checked }) => 
-        { return (props.selected && checked || !props.selected) &&
+        { return (props.selectedShop.length > 0 && props.selectedShop === shop && props.selected && checked 
+            || props.selectedShop.length === 0 && props.selected && checked  
+            || !props.selected) &&
           <SwipeToDelete
             // required
             key={shop+option}

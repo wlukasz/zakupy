@@ -1,4 +1,5 @@
 import React from 'react'
+import ShopSelector from './ShopSelector'
 
 const OptionsHeader = (props) => {
   let order = 0
@@ -12,7 +13,12 @@ const OptionsHeader = (props) => {
         {props.selected ? 'All Items' : 'This Shopping Trip'}
       </button>
 
-      {!props.selected &&
+      {(props.selected) ? 
+        <ShopSelector 
+          uniqueShops={props.uniqueShops}
+          filterShop={props.filterShop} 
+        /> 
+        :
         <button
           className="button button--link"  
           onClick={props.handleDeleteOptions}

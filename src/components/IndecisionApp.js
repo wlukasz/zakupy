@@ -4,43 +4,67 @@ import Header from './Header'
 import Options from './Options'
 
 export default class IndecisionApp extends React.Component {
+  constructor(props) {
+    super(props)
+    this.filterShop = this.filterShop.bind(this)
+  }
   state = {
     options: [],
-    selected: false,
-    selectedOption: undefined
+    uniqueShops: [],
+    selectedShop: '',
+    selected: false
   }
   handleDeleteOptions = () => {
     if (confirm('Warning: This will permanently remove all items.\nNote: To remove just one item swipe it to the left.')) {
       // Return value (an object) is wrapped in parenthesis 'cos otherwise
       // the curly braces would be treated as a wrapper for function body,
       // which is optional for one-line returns and we don't use it here
-      this.setState(() => ({ options: []}))
+      this.setState(() => ({ options: [], uniqueShops: [] }))
     }
   }
   handleDeleteOption = (optionToRemove, shopToRemove) => {
     this.setState((prevState) => ({
       options: prevState.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
     }))
+    this.resetShops(this.state.options)
   }
   handleCheck = (optionCheck, shopCheck) => {
     const found = this.state.options.find(({ option, shop }) => option === optionCheck && shop === shopCheck)
     found.checked = !found.checked
     this.setState((prevState) => ({
-      options: prevState.options.filter(({ option, shop }) => option !== optionCheck || shop !== shopCheck)
+      options: prevState.options
+      .filter(({ option, shop }) => option !== optionCheck || shop !== shopCheck)
+      .concat([found]) 
     }))
-    this.setState((prevState) => ({ 
-      options: prevState.options.concat([found]) 
-    }))
+    if (this.state.selected) {
+      this.resetShops(this.state.options)
+    }
   }
   handleToggleView = () => {
+    if (!this.state.selected) {
+      this.resetShops(this.state.options)
+      this.filterShop('')
+    }
     this.setState((prevState) => ({
       selected: !prevState.selected
+    }))
+  }
+  resetShops(options) {
+    const shops = options
+      .filter(({ checked }) => checked)
+      .map(({ shop }) => shop)
+    this.setState(() => ({ 
+      uniqueShops: [...new Set(shops)] // this dedups the array
+    }))
+  }
+  filterShop(shopToShow) {
+    this.setState(() => ({
+      selectedShop: shopToShow
     }))
   }
   handleAddOption = ({ option, shop }) => {
     const item = option.toLowerCase()
     const where = shop.toLowerCase() || 'elsewhere'
-    console.log('shop:', shop.length)
     if (!option) {
       return 'Enter valid value to add item'
     } else if (this.state.options.find(({ option, shop }) => {
@@ -49,9 +73,8 @@ export default class IndecisionApp extends React.Component {
       return 'This item already exists'
     }
 
-    const checked = false
     this.setState((prevState) => ({ 
-      options: prevState.options.concat([{ option: item, shop: where, checked }]) 
+      options: prevState.options.concat([{ option: item, shop: where, checked: false }]) 
     }))
   }
 
@@ -85,10 +108,13 @@ export default class IndecisionApp extends React.Component {
             <Options 
               options={this.state.options}
               selected={this.state.selected}
+              uniqueShops={this.state.uniqueShops}
               handleDeleteOptions={this.handleDeleteOptions}
               handleDeleteOption={this.handleDeleteOption}
               handleCheck={this.handleCheck}
               handleToggleView={this.handleToggleView}
+              filterShop={this.filterShop} 
+              selectedShop={this.state.selectedShop}
             />
             {this.state.selected === false &&
               <AddOption 
