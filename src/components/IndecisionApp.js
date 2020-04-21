@@ -71,9 +71,6 @@ export default class IndecisionApp extends React.Component {
     const json = JSON.stringify(this.state.options)
     localStorage.setItem('options', json)
   }
-  componentWillUnmount() {
-    console.log('componentWillUnmount!')
-  }
   
   render() {
     const subTitle = ''

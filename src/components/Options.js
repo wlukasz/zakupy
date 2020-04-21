@@ -2,7 +2,9 @@ import React from 'react'
 import SwipeToDelete from 'react-swipe-to-delete-ios'
 import Option from './Option'
 
-const Options = (props) => (
+const Options = (props) => {
+  let order = 0
+  return (
   <div>
     <div className="widget-header">
       <button
@@ -31,7 +33,7 @@ const Options = (props) => (
           return 0
         }
       })
-      .map(({ option, shop, checked }, index) => 
+      .map(({ option, shop, checked }) => 
         { return (props.selected && checked || !props.selected) &&
           <SwipeToDelete
             key={shop+option}
@@ -49,8 +51,7 @@ const Options = (props) => (
             shopText={shop}
             optionText={option}
             checked={checked}
-            count={index + 1} 
-            // handleDeleteOption={props.handleDeleteOption}
+            count={++order} 
             handleCheck={props.handleCheck}
           />
           </SwipeToDelete>
@@ -58,6 +59,7 @@ const Options = (props) => (
       )
     }
   </div>
-)
+  )
+}
 
 export default Options
