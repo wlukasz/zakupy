@@ -53,6 +53,15 @@ export default class IndecisionApp extends React.Component {
       selected: !prevState.selected
     }))
   }
+  handleToggleTicks = () => {
+    const anyTicks = !!this.state.options.find(({ checked }) => checked === true)
+    let toggledOptions = []
+    this.state.options.map(({ option, shop, checked }) => {
+      toggledOptions = toggledOptions.concat([{ option, shop, checked: anyTicks ? false : !checked }])
+    })
+
+    this.setState({ options: toggledOptions })
+  }
   resetShops(options) {
     const shops = options
       .filter(({ checked }) => checked)
@@ -117,6 +126,7 @@ export default class IndecisionApp extends React.Component {
               handleDeleteOption={this.handleDeleteOption}
               handleCheck={this.handleCheck}
               handleToggleView={this.handleToggleView}
+              handleToggleTicks={this.handleToggleTicks}
               filterShop={this.filterShop} 
               selectedShop={this.state.selectedShop}
             />

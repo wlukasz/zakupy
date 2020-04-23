@@ -12,6 +12,7 @@ const Options = (props) => {
       uniqueShops={props.uniqueShops}
       handleToggleView={props.handleToggleView}
       handleDeleteOptions={props.handleDeleteOptions}
+      handleToggleTicks={props.handleToggleTicks}
       filterShop={props.filterShop} 
     />
 
