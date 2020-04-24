@@ -7,15 +7,58 @@ export default class IndecisionApp extends React.Component {
   constructor(props) {
     super(props)
     this.filterShop = this.filterShop.bind(this)
+    this.handleSetLingo = this.handleSetLingo.bind(this)
   }
   state = {
     options: [],
     uniqueShops: [],
     selectedShop: '',
-    selected: false
+    selected: false,
+    selectedLingo: '',
+    language: {},
+    lingos: [
+      { 
+        lingo: 'en',
+        shopping: 'Shopping',
+        allItems: 'All Items',
+        thisShoppingTrip: 'Go Shopping!',
+        toggleTicks: 'Toggle Ticks',
+        removeAll: 'Remove All',
+        allShops: 'All Shops',
+        deleteAllMsg1: 'Warning: OK will permanently remove all items. Push Cancel to avoid',
+        deleteAllMsg2: 'Note: To remove just one item Cancel this pop-up and swipe item to the left.',
+        removeItem: 'Remove',
+        addOptionMsg1: 'Enter valid value to add item',
+        addOptionMsg2: 'This item already exists',
+        emptyListMsg: 'Please add items to get started!',
+        itemPlaceholder: 'item',
+        shopPlaceholder: 'shop (optional)',  
+        elsewhere: 'elsewhere',
+        addItemText: 'Add Item',
+      },
+      { 
+        lingo: 'pl',
+        shopping: 'Zakupy',
+        allItems: 'Lista Ogólna',
+        thisShoppingTrip: 'Na Zakupy!',
+        toggleTicks: 'Za/Od-znacz Wszystko',
+        removeAll: 'Wyczyść Listę',
+        allShops: 'Wszystkie Sklepy',
+        deleteAllMsg1: 'Uwaga: OK usunie wszystkie towary z listy. Cancel anuluje komendę.',
+        deleteAllMsg2: 'Notka: Aby usunąć jeden towar anuluj tę komendę i przesuń wybrany towar w lewo.',
+        removeItem: 'Usuń',
+        addOptionMsg1: 'Wpisz towar aby dodać go do listy',
+        addOptionMsg2: 'Ten towar został już wcześniej dodany do listy', 
+        emptyListMsg: 'Aby zacząć dodaj towary do listy.',  
+        itemPlaceholder: 'towar',
+        shopPlaceholder: 'sklep (opcjonalny)',  
+        elsewhere: 'gdziekolwiek',
+        addItemText: 'Dodaj Towar',
+      }
+    ]
   }
   handleDeleteOptions = () => {
-    if (confirm('Warning: This will permanently remove all items.\nNote: To remove just one item swipe it to the left.')) {
+    if (confirm(this.state.language.deleteAllMsg1+'\n'+this.state.language.deleteAllMsg2)) {
       // Return value (an object) is wrapped in parenthesis 'cos otherwise
       // the curly braces would be treated as a wrapper for function body,
       // which is optional for one-line returns and we don't use it here
@@ -77,17 +120,24 @@ export default class IndecisionApp extends React.Component {
   }
   handleAddOption = ({ option, shop }) => {
     const item = option.toLowerCase()
-    const where = shop.toLowerCase() || 'elsewhere'
+    const where = shop.toLowerCase() || this.state.language.elsewhere
     if (!option) {
-      return 'Enter valid value to add item'
+      return this.state.language.addOptionMsg1
     } else if (this.state.options.find(({ option, shop }) => {
         return item === option && where === shop
       })) {
-      return 'This item already exists'
+      return this.state.language.addOptionMsg2
     }
 
     this.setState((prevState) => ({ 
       options: prevState.options.concat([{ option: item, shop: where, checked: false }]) 
+    }))
+  }
+  handleSetLingo(lingo) {
+    const lingoToSet = lingo
+    this.setState(() => ({ 
+      selectedLingo: lingoToSet,
+      language: this.state.lingos.find(({ lingo }) => lingo === lingoToSet)
     }))
   }
 
@@ -104,10 +154,24 @@ export default class IndecisionApp extends React.Component {
     } catch (error) {
       // Do nothing - default will be used
     }
+    try {
+      const jsonLingo = localStorage.getItem('lingo')
+      const storedLingo = JSON.parse(jsonLingo) 
+      const lingoToSet = storedLingo ? storedLingo : 'en'
+      this.handleSetLingo(lingoToSet)
+    //   this.setState(() => ({ 
+    //     selectedLingo: lingoToSet,
+    //     language: this.state.lingos.find(({ lingo }) => lingo === lingoToSet)
+    //   }))
+    } catch (error) {
+      // Do nothing - default will be used
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     const json = JSON.stringify(this.state.options)
     localStorage.setItem('options', json)
+    const jsonLingo = JSON.stringify(this.state.selectedLingo)
+    localStorage.setItem('lingo', jsonLingo)
   }
   
   render() {
@@ -115,11 +179,16 @@ export default class IndecisionApp extends React.Component {
 
     return (
       <div>
-        <Header subTitle={subTitle} />                                                    
+        <Header 
+          subTitle={subTitle} 
+          shopping={this.state.language.shopping}
+          handleSetLingo={this.handleSetLingo}
+       />                                                    
         <div className="container">
           <div className="widget">
             <Options 
               options={this.state.options}
+              lang={this.state.language}
               selected={this.state.selected}
               uniqueShops={this.state.uniqueShops}
               handleDeleteOptions={this.handleDeleteOptions}
@@ -132,7 +201,10 @@ export default class IndecisionApp extends React.Component {
             />
             {this.state.selected === false &&
               <AddOption 
-                handleAddOption={this.handleAddOption}
+              itemPlaceholder={this.state.language.itemPlaceholder}
+              shopPlaceholder={this.state.language.shopPlaceholder}
+              addItemText={this.state.language.addItemText}
+              handleAddOption={this.handleAddOption}
               />
             }
           </div>

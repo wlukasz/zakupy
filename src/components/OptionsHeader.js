@@ -10,28 +10,29 @@ const OptionsHeader = (props) => {
         className="button button--link"  
         onClick={props.handleToggleView}
       >
-        {props.selected ? 'All Items' : 'This Shopping Trip'}
+        {props.selected ? props.lang.allItems : props.lang.thisShoppingTrip}
       </button>
 
       {(props.selected) ? 
         <ShopSelector 
           uniqueShops={props.uniqueShops}
-          filterShop={props.filterShop} 
+          filterShop={props.filterShop}
+          allShops={props.lang.allShops} 
         /> 
         :
-        <div>
-        <button
-        className="button button--link"  
-        onClick={props.handleToggleTicks}
-        >
-          Toggle Ticks
-        </button>
-        <button
-          className="button button--link"  
-          onClick={props.handleDeleteOptions}
-        >
-          Remove All
-        </button>
+        <div className="inline-block">
+          <button
+            className="button button--link"  
+            onClick={props.handleToggleTicks}
+          >
+            {props.lang.toggleTicks}
+          </button>
+          <button
+            className="button button--link"  
+            onClick={props.handleDeleteOptions}
+          >
+            {props.lang.removeAll}
+          </button>
         </div>
       }
     </div>

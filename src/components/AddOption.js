@@ -1,8 +1,11 @@
 import React from 'react'
 
 export default class AddOption extends React.Component {
+  constructor(props) {
+    super(props)
+  }
   state = {
-    error: undefined
+  error: undefined
   }
   handleAddOption = (e) => {
     e.preventDefault()
@@ -23,9 +26,9 @@ export default class AddOption extends React.Component {
       <div>
         {this.state.error && <p className="add-option-error">{this.state.error}</p>}
         <form className="add-option" onSubmit={this.handleAddOption}>
-          <input className="add-option__input" type="text" name="option" placeholder="item" />
-          <input className="add-option__input" type="text" name="shop" placeholder="shop" />
-          <button className="button">Add item</button>
+          <input className="add-option__input" type="text" name="option" placeholder={this.props.itemPlaceholder} />
+          <input className="add-option__input" type="text" name="shop" placeholder={this.props.shopPlaceholder} />
+          <button className="button">{this.props.addItemText}</button>
         </form>        
       </div>
     )

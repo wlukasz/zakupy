@@ -18,8 +18,14 @@
   margin: 0;
 }
 
+.header__flex {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (min-width: $desktop-breakpoint) {
   .header {
     margin-bottom: $xl-size;
+    display: inline-block;
   }
 }

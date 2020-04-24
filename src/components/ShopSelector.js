@@ -7,7 +7,7 @@ const ShopSelector = (props) => (
         props.filterShop(e.target.value)
       }}
     >
-      <option value="">All Shops</option>
+      <option value="">{props.allShops}</option>
       {  
         props.uniqueShops
         .sort((a, b) => {

@@ -8,6 +8,7 @@ const Options = (props) => {
   return (
   <div>
     <OptionsHeader 
+      lang={props.lang}
       selected={props.selected}
       uniqueShops={props.uniqueShops}
       handleToggleView={props.handleToggleView}
@@ -16,7 +17,7 @@ const Options = (props) => {
       filterShop={props.filterShop} 
     />
 
-    {props.options.length === 0 && <p className="widget__message">Please add items to get started!</p>}
+    {props.options.length === 0 && <p className="widget__message">{props.lang.emptyListMsg}</p>}
     {props.options
       .sort((a, b) => {
         if (a.shop+a.option < b.shop+b.option) {
@@ -41,7 +42,7 @@ const Options = (props) => {
             // optional
             transitionDuration={250} // default
             deleteWidth={75} // default
-            deleteText='Remove'
+            deleteText={props.lang.removeItem}
           >
           <Option 
             key={shop+option} 
