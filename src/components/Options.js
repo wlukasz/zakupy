@@ -31,7 +31,9 @@ const Options = (props) => {
       .map(({ option, shop, checked }) => 
         { return (props.selectedShop.length > 0 && props.selectedShop === shop && props.selected && checked 
             || props.selectedShop.length === 0 && props.selected && checked  
-            || !props.selected) &&
+            || !props.selected && props.selectedShop.length > 0 && props.selectedShop === shop
+            || !props.selected && props.selectedShop.length === 0) 
+            &&
           <SwipeToDelete
             // required
             key={shop+option}

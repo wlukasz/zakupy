@@ -3,6 +3,7 @@ import React from 'react'
 const ShopSelector = (props) => (
   <div>
     <select 
+      id="shopselector"
       onChange={(e) => {
         props.filterShop(e.target.value)
       }}

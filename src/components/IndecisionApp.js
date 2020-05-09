@@ -84,17 +84,14 @@ export default class IndecisionApp extends React.Component {
       if (more.length === 0) {
         this.filterShop('')
       }
-      this.resetShops(this.state.options)
-    }
+      this.resetShops(this.state.options.filter(({ checked }) => checked))
+    } 
   }
   handleToggleView = () => {
-    if (!this.state.selected) {
-      this.resetShops(this.state.options)
-      this.filterShop('')
-    }
-    this.setState((prevState) => ({
-      selected: !prevState.selected
-    }))
+    this.resetShops(this.state.options)
+    document.getElementById('shopselector').value = ''
+    this.filterShop('')
+    this.setState((prevState) => ({ selected: !prevState.selected }))
   }
   handleToggleTicks = () => {
     const anyTicks = !!this.state.options.find(({ checked }) => checked === true)
@@ -105,10 +102,23 @@ export default class IndecisionApp extends React.Component {
 
     this.setState({ options: toggledOptions })
   }
+  setShops(options) {
+    let shops = []
+    shops = options.map(({ shop }) => shop)
+    this.setState(() => ({ 
+      uniqueShops: [...new Set(shops)] // this dedups the array
+    }))
+  }
   resetShops(options) {
-    const shops = options
-      .filter(({ checked }) => checked)
-      .map(({ shop }) => shop)
+    let shops = []
+    if (!this.state.selected) {
+        shops = options
+        .filter(({ checked }) => checked)
+        .map(({ shop }) => shop)
+    } else {
+      shops = options.map(({ shop }) => shop)
+    }
+      
     this.setState(() => ({ 
       uniqueShops: [...new Set(shops)] // this dedups the array
     }))
@@ -150,8 +160,9 @@ export default class IndecisionApp extends React.Component {
       
       if (options) {
         this.setState(() => ({ options }))
+        this.setShops(options)
       }
-    } catch (error) {
+  } catch (error) {
       // Do nothing - default will be used
     }
     try {
@@ -159,10 +170,6 @@ export default class IndecisionApp extends React.Component {
       const storedLingo = JSON.parse(jsonLingo) 
       const lingoToSet = storedLingo ? storedLingo : 'en'
       this.handleSetLingo(lingoToSet)
-    //   this.setState(() => ({ 
-    //     selectedLingo: lingoToSet,
-    //     language: this.state.lingos.find(({ lingo }) => lingo === lingoToSet)
-    //   }))
     } catch (error) {
       // Do nothing - default will be used
     }
