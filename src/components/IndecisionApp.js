@@ -69,7 +69,8 @@ export default class IndecisionApp extends React.Component {
     this.setState((prevState) => ({
       options: prevState.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
     }))
-    this.resetShops(this.state.options)
+    this.resetShops(this.state.options, true)
+    this.filterShop('')
   }
   handleCheck = (optionCheck, shopCheck) => {
     const found = this.state.options.find(({ option, shop }) => option === optionCheck && shop === shopCheck)
@@ -109,9 +110,9 @@ export default class IndecisionApp extends React.Component {
       uniqueShops: [...new Set(shops)] // this dedups the array
     }))
   }
-  resetShops(options) {
+  resetShops(options, trick = null) {
     let shops = []
-    if (!this.state.selected) {
+    if (!this.state.selected && !trick) {
         shops = options
         .filter(({ checked }) => checked)
         .map(({ shop }) => shop)
@@ -138,6 +139,10 @@ export default class IndecisionApp extends React.Component {
       })) {
       return this.state.language.addOptionMsg2
     }
+
+    this.resetShops(this.state.options.concat([{ option: item, shop: where, checked: false }]), true)
+    document.getElementById('shopselector').value = ''
+    this.filterShop('')
 
     this.setState((prevState) => ({ 
       options: prevState.options.concat([{ option: item, shop: where, checked: false }]) 

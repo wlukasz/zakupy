@@ -5,7 +5,7 @@ const OptionsHeader = (props) => {
   let order = 0
   return (
   <div>
-    <div className="widget-header">
+    <div className="options-header">
       <button
         className="button button--link"  
         onClick={props.handleToggleView}
@@ -16,25 +16,31 @@ const OptionsHeader = (props) => {
       {!props.selected && 
         <div>
           <button
-            className="button button--link"  
-            onClick={props.handleDeleteOptions}
-          >
-            {props.lang.removeAll}
-          </button>
-          <button
-            className="button button--link"  
+            className="button button--link button--link-mod"  
             onClick={props.handleToggleTicks}
           >
             {props.lang.toggleTicks}
           </button>
         </div>
       }
-        
-      <ShopSelector 
-        uniqueShops={props.uniqueShops}
-        filterShop={props.filterShop}
-        allShops={props.lang.allShops} 
-      /> 
+      
+      <div>
+        <ShopSelector 
+          uniqueShops={props.uniqueShops}
+          filterShop={props.filterShop}
+          allShops={props.lang.allShops} 
+        /> 
+        {!props.selected && 
+          <div>
+            <button
+              className="button button--link"  
+              onClick={props.handleDeleteOptions}
+            >
+              {props.lang.removeAll}
+            </button>
+          </div>
+        }
+      </div>
     </div>
   </div>
   )

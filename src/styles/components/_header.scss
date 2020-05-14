@@ -23,9 +23,3 @@
   justify-content: space-between;
 }
 
-@media (min-width: $desktop-breakpoint) {
-  .header {
-    margin-bottom: $xl-size;
-    display: inline-block;
-  }
-}
