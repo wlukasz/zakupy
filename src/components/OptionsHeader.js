@@ -2,7 +2,6 @@ import React from 'react'
 import ShopSelector from './ShopSelector'
 
 const OptionsHeader = (props) => {
-  let order = 0
   return (
   <div>
     <div className="options-header">
@@ -19,7 +18,13 @@ const OptionsHeader = (props) => {
             className="button button--link button--link-mod"  
             onClick={props.handleToggleTicks}
           >
-            {props.lang.toggleTicks}
+            <input 
+              id="toggleall"
+              className="chkbox"
+              type="checkbox"
+              onChange={props.handleToggleTicks}
+            />
+            <label className="header-checkbox" htmlFor="toggleall">{props.lang.toggleTicks}</label>
           </button>
         </div>
       }

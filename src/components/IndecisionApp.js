@@ -8,6 +8,7 @@ export default class IndecisionApp extends React.Component {
     super(props)
     this.filterShop = this.filterShop.bind(this)
     this.handleSetLingo = this.handleSetLingo.bind(this)
+    this.setAllTicks = this.setAllTicks.bind(this)
   }
   state = {
     options: [],
@@ -22,7 +23,7 @@ export default class IndecisionApp extends React.Component {
         shopping: 'Shopping',
         allItems: 'All Items',
         thisShoppingTrip: 'Go Shopping!',
-        toggleTicks: 'Toggle Ticks',
+        toggleTicks: 'All',
         removeAll: 'Remove All',
         allShops: 'All Shops',
         deleteAllMsg1: 'Warning: OK will permanently remove all items. Push Cancel to avoid',
@@ -41,7 +42,7 @@ export default class IndecisionApp extends React.Component {
         shopping: 'Zakupy',
         allItems: 'Lista Ogólna',
         thisShoppingTrip: 'Na Zakupy!',
-        toggleTicks: 'Za/Od-znacz Wszystko',
+        toggleTicks: 'Wszystko',
         removeAll: 'Wyczyść Listę',
         allShops: 'Wszystkie Sklepy',
         deleteAllMsg1: 'Uwaga: OK usunie wszystkie towary z listy. Cancel anuluje komendę.',
@@ -66,20 +67,26 @@ export default class IndecisionApp extends React.Component {
     }
   }
   handleDeleteOption = (optionToRemove, shopToRemove) => {
-    this.setState((prevState) => ({
-      options: prevState.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
-    }))
-    this.resetShops(this.state.options, true)
+    const newOptions = this.state.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
+    this.setState({ options: newOptions })
+    this.resetShops(newOptions, true)
     this.filterShop('')
+    if (!this.state.selected) {
+      this.setAllTicks(newOptions)
+    }
   }
   handleCheck = (optionCheck, shopCheck) => {
     const found = this.state.options.find(({ option, shop }) => option === optionCheck && shop === shopCheck)
     found.checked = !found.checked
-    this.setState((prevState) => ({
-      options: prevState.options
-      .filter(({ option, shop }) => option !== optionCheck || shop !== shopCheck)
-      .concat([found]) 
-    }))
+    const newOptions = this.state.options
+                      .filter(({ option, shop }) => option !== optionCheck || shop !== shopCheck)
+                      .concat([found]) 
+
+    if (!this.state.selected) {
+      this.setAllTicks(newOptions)
+    }
+    this.setState({ options: newOptions })
+
     if (this.state.selected) {
       const more = this.state.options.filter(({ shop, checked }) => checked && shop === shopCheck)
       if (more.length === 0) {
@@ -92,7 +99,13 @@ export default class IndecisionApp extends React.Component {
     this.resetShops(this.state.options)
     document.getElementById('shopselector').value = ''
     this.filterShop('')
-    this.setState((prevState) => ({ selected: !prevState.selected }))
+    
+    this.setState((prevState) => ({ selected: !prevState.selected }), () => {
+      // callback executed AFTER new "selected" is set
+      if (!this.state.selected) {
+        this.setAllTicks(this.state.options)
+      }
+    })
   }
   handleToggleTicks = () => {
     const anyTicks = !!this.state.options.find(({ checked }) => checked === true)
@@ -129,6 +142,14 @@ export default class IndecisionApp extends React.Component {
       selectedShop: shopToShow
     }))
   }
+  setAllTicks(options) {
+    const foundTick = !!options.find(option => option.checked === true)
+    if (foundTick) {
+      document.getElementById('toggleall').checked = false
+    } else {
+      document.getElementById('toggleall').checked = true
+    }
+  }
   handleAddOption = ({ option, shop }) => {
     const item = option.toLowerCase()
     const where = shop.toLowerCase() || this.state.language.elsewhere
@@ -140,13 +161,12 @@ export default class IndecisionApp extends React.Component {
       return this.state.language.addOptionMsg2
     }
 
-    this.resetShops(this.state.options.concat([{ option: item, shop: where, checked: false }]), true)
+    const newOptions = this.state.options.concat([{ option: item, shop: where, checked: false }])
+    this.resetShops(newOptions, true)
     document.getElementById('shopselector').value = ''
     this.filterShop('')
-
-    this.setState((prevState) => ({ 
-      options: prevState.options.concat([{ option: item, shop: where, checked: false }]) 
-    }))
+    // this.setAllTicks(newOptions)
+    this.setState({ options: newOptions })
   }
   handleSetLingo(lingo) {
     const lingoToSet = lingo
@@ -166,6 +186,9 @@ export default class IndecisionApp extends React.Component {
       if (options) {
         this.setState(() => ({ options }))
         this.setShops(options)
+        if (!this.state.selected) {
+          this.setAllTicks(options)
+        }
       }
   } catch (error) {
       // Do nothing - default will be used
