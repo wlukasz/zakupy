@@ -12,7 +12,7 @@ const OptionsHeader = (props) => {
         {props.selected ? props.lang.allItems : props.lang.thisShoppingTrip}
       </button>
 
-      {!props.selected && 
+      {!props.selected ? 
         <div>
           <button
             className="button button--link button--link-mod"  
@@ -26,6 +26,17 @@ const OptionsHeader = (props) => {
             />
             <label className="header-checkbox" htmlFor="toggleall">{props.lang.toggleTicks}</label>
           </button>
+        </div>
+        :
+        <div>
+          {props.undoLength > 0 &&
+          <button
+            className="button button--link"  
+            onClick={props.undoItem}
+          >
+            {props.lang.undoItem}
+          </button>
+          }
         </div>
       }
       

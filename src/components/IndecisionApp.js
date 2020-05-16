@@ -9,12 +9,14 @@ export default class IndecisionApp extends React.Component {
     this.filterShop = this.filterShop.bind(this)
     this.handleSetLingo = this.handleSetLingo.bind(this)
     this.setAllTicks = this.setAllTicks.bind(this)
+    this.undoItem = this.undoItem.bind(this)
   }
   state = {
     options: [],
     uniqueShops: [],
     selectedShop: '',
     selected: false,
+    undoQueue: [],
     selectedLingo: '',
     language: {},
     lingos: [
@@ -36,6 +38,7 @@ export default class IndecisionApp extends React.Component {
         shopPlaceholder: 'shop (optional)',  
         elsewhere: 'elsewhere',
         addItemText: 'Add Item',
+        undoItem: 'Undo',
       },
       { 
         lingo: 'pl',
@@ -55,6 +58,7 @@ export default class IndecisionApp extends React.Component {
         shopPlaceholder: 'sklep (opcjonalny)',  
         elsewhere: 'gdziekolwiek',
         addItemText: 'Dodaj Towar',
+        undoItem: 'Wróć',
       }
     ]
   }
@@ -72,7 +76,7 @@ export default class IndecisionApp extends React.Component {
     this.resetShops(newOptions, true)
     this.filterShop('')
     if (!this.state.selected) {
-      this.setAllTicks(newOptions)
+      this.setAllTicks(newOptions, this.state.selectedShop)
     }
   }
   handleCheck = (optionCheck, shopCheck) => {
@@ -82,10 +86,13 @@ export default class IndecisionApp extends React.Component {
                       .filter(({ option, shop }) => option !== optionCheck || shop !== shopCheck)
                       .concat([found]) 
 
+    let newUndoQueue = []                  
     if (!this.state.selected) {
-      this.setAllTicks(newOptions)
+      this.setAllTicks(newOptions, this.state.selectedShop)
+    } else {
+      newUndoQueue = this.state.undoQueue.concat([{ option: optionCheck, shop: shopCheck, checked: true}])
     }
-    this.setState({ options: newOptions })
+    this.setState({ options: newOptions, undoQueue: newUndoQueue })
 
     if (this.state.selected) {
       const more = this.state.options.filter(({ shop, checked }) => checked && shop === shopCheck)
@@ -104,6 +111,7 @@ export default class IndecisionApp extends React.Component {
       // callback executed AFTER new "selected" is set
       if (!this.state.selected) {
         this.setAllTicks(this.state.options)
+        this.setState(() => ({ undoQueue: [] }))
       }
     })
   }
@@ -116,6 +124,7 @@ export default class IndecisionApp extends React.Component {
 
     this.setState({ options: toggledOptions })
   }
+  // This is for initial setup
   setShops(options) {
     let shops = []
     shops = options.map(({ shop }) => shop)
@@ -132,18 +141,20 @@ export default class IndecisionApp extends React.Component {
     } else {
       shops = options.map(({ shop }) => shop)
     }
-      
-    this.setState(() => ({ 
-      uniqueShops: [...new Set(shops)] // this dedups the array
-    }))
+    
+    this.setState(() => ({ uniqueShops: [...new Set(shops)] }), () => {
+      if (!this.state.selected) {
+        this.setAllTicks(this.state.options, this.state.selectedShop)
+      }
+    })
   }
   filterShop(shopToShow) {
     this.setState(() => ({
       selectedShop: shopToShow
     }))
   }
-  setAllTicks(options) {
-    const foundTick = !!options.find(option => option.checked === true)
+  setAllTicks(options, selectedShop = null) {
+    const foundTick = !!options.find(option => selectedShop ? option.checked === true && option.shop === selectedShop : option.checked === true)
     if (foundTick) {
       document.getElementById('toggleall').checked = false
     } else {
@@ -165,8 +176,19 @@ export default class IndecisionApp extends React.Component {
     this.resetShops(newOptions, true)
     document.getElementById('shopselector').value = ''
     this.filterShop('')
-    // this.setAllTicks(newOptions)
     this.setState({ options: newOptions })
+  }
+  undoItem() {
+    let clonedUndoQueue = [...this.state.undoQueue]
+    const itemToUndo = clonedUndoQueue.pop() 
+    let clonedOptions = [...this.state.options]
+    clonedOptions.map(item => {
+      if (item.option === itemToUndo.option && item.shop === itemToUndo.shop) {
+        item.checked = true
+      }
+    })
+
+    this.setState({ options: clonedOptions, undoQueue: clonedUndoQueue })
   }
   handleSetLingo(lingo) {
     const lingoToSet = lingo
@@ -233,6 +255,8 @@ export default class IndecisionApp extends React.Component {
               handleToggleTicks={this.handleToggleTicks}
               filterShop={this.filterShop} 
               selectedShop={this.state.selectedShop}
+              undoItem={this.undoItem}
+              undoLength={this.state.undoQueue.length}
             />
             {this.state.selected === false &&
               <AddOption 

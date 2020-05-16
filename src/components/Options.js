@@ -14,7 +14,9 @@ const Options = (props) => {
       handleToggleView={props.handleToggleView}
       handleDeleteOptions={props.handleDeleteOptions}
       handleToggleTicks={props.handleToggleTicks}
-      filterShop={props.filterShop} 
+      filterShop={props.filterShop}
+      undoItem={props.undoItem} 
+      undoLength={props.undoLength}
     />
 
     {props.options.length === 0 && <p className="widget__message">{props.lang.emptyListMsg}</p>}
