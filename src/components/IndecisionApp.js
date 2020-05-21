@@ -72,12 +72,15 @@ export default class IndecisionApp extends React.Component {
   }
   handleDeleteOption = (optionToRemove, shopToRemove) => {
     const newOptions = this.state.options.filter(({ option, shop }) => option !== optionToRemove || shop !== shopToRemove)
-    this.setState({ options: newOptions })
-    this.resetShops(newOptions, true)
-    this.filterShop('')
-    if (!this.state.selected) {
-      this.setAllTicks(newOptions, this.state.selectedShop)
-    }
+    this.setState({ options: newOptions }, () => {
+      this.resetShops(this.state.options, true, () => {
+        this.filterShop(this.state.selectedShop, () => {
+          if (!this.state.selected) {
+            this.setAllTicks(this.state.options, this.state.selectedShop)
+          }
+        })
+      })
+    })
   }
   handleCheck = (optionCheck, shopCheck) => {
     const found = this.state.options.find(({ option, shop }) => option === optionCheck && shop === shopCheck)
@@ -116,10 +119,23 @@ export default class IndecisionApp extends React.Component {
     })
   }
   handleToggleTicks = () => {
-    const anyTicks = !!this.state.options.find(({ checked }) => checked === true)
+    const shopSelected = !!this.state.selectedShop
+    const anyTicks = !!this.state.options.find(
+      ({ shop, checked }) => 
+      shopSelected ? shop === this.state.selectedShop && checked === true : checked === true
+    )
+
     let toggledOptions = []
     this.state.options.map(({ option, shop, checked }) => {
-      toggledOptions = toggledOptions.concat([{ option, shop, checked: anyTicks ? false : !checked }])
+      if (shopSelected) {
+        if (shop === this.state.selectedShop) {
+          toggledOptions = toggledOptions.concat([{ option, shop, checked: anyTicks ? false : !checked }])
+        } else {
+          toggledOptions = toggledOptions.concat([{ option, shop, checked }])
+        }
+      } else {
+        toggledOptions = toggledOptions.concat([{ option, shop, checked: anyTicks ? false : !checked }])
+      }
     })
 
     this.setState({ options: toggledOptions })
@@ -143,15 +159,22 @@ export default class IndecisionApp extends React.Component {
     }
     
     this.setState(() => ({ uniqueShops: [...new Set(shops)] }), () => {
+      const shopExists = this.state.uniqueShops.find((shop) => shop === this.state.selectedShop)
+      if (!shopExists) {
+        this.setState({ selectedShop: '' })
+      }
+
       if (!this.state.selected) {
         this.setAllTicks(this.state.options, this.state.selectedShop)
       }
     })
   }
   filterShop(shopToShow) {
-    this.setState(() => ({
-      selectedShop: shopToShow
-    }))
+    this.setState(() => ({ selectedShop: shopToShow }), () => {
+      if (!this.state.selected) {
+        this.setAllTicks(this.state.options, this.state.selectedShop)
+      }
+    })
   }
   setAllTicks(options, selectedShop = null) {
     const foundTick = !!options.find(option => selectedShop ? option.checked === true && option.shop === selectedShop : option.checked === true)
@@ -162,20 +185,23 @@ export default class IndecisionApp extends React.Component {
     }
   }
   handleAddOption = ({ option, shop }) => {
-    const item = option.toLowerCase()
-    const where = shop.toLowerCase() || this.state.language.elsewhere
     if (!option) {
       return this.state.language.addOptionMsg1
     } else if (this.state.options.find(({ option, shop }) => {
-        return item === option && where === shop
-      })) {
+      return item === option && where === shop
+    })) {
       return this.state.language.addOptionMsg2
     }
-
+    
+    const item = option.toLowerCase()
+    const where = shop.toLowerCase() || this.state.language.elsewhere
     const newOptions = this.state.options.concat([{ option: item, shop: where, checked: false }])
+
     this.resetShops(newOptions, true)
-    document.getElementById('shopselector').value = ''
-    this.filterShop('')
+    if (this.state.selectedShop && this.state.selectedShop !== where) {
+      document.getElementById('shopselector').value = ''
+      this.filterShop('')
+    }
     this.setState({ options: newOptions })
   }
   undoItem() {
