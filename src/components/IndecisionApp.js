@@ -195,7 +195,7 @@ export default class IndecisionApp extends React.Component {
     
     const item = option.toLowerCase()
     const where = shop.toLowerCase() || this.state.language.elsewhere
-    const newOptions = this.state.options.concat([{ option: item, shop: where, checked: false }])
+    const newOptions = this.state.options.concat([{ option: item, shop: where, checked: true }])
 
     this.resetShops(newOptions, true)
     if (this.state.selectedShop && this.state.selectedShop !== where) {
