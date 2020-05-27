@@ -289,6 +289,7 @@ export default class IndecisionApp extends React.Component {
               itemPlaceholder={this.state.language.itemPlaceholder}
               shopPlaceholder={this.state.language.shopPlaceholder}
               addItemText={this.state.language.addItemText}
+              selectedShop={this.state.selectedShop}
               handleAddOption={this.handleAddOption}
               />
             }
