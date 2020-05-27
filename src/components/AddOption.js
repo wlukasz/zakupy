@@ -27,7 +27,7 @@ export default class AddOption extends React.Component {
         {this.state.error && <p className="add-option-error">{this.state.error}</p>}
         <form className="add-option" onSubmit={this.handleAddOption}>
           <input className="add-option__input" type="text" name="option" placeholder={this.props.itemPlaceholder} />
-          <input className="add-option__input" type="text" name="shop" placeholder={this.props.shopPlaceholder} />
+          <input className="add-option__input" type="text" name="shop" placeholder={this.props.shopPlaceholder} value={this.props.selectedShop && this.props.selectedShop} />
           <button className="button">{this.props.addItemText}</button>
         </form>        
       </div>
