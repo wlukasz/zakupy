@@ -17,9 +17,14 @@ export default class AddOption extends React.Component {
     
     if (!error) {
       e.target.elements.option.value = ''
-      e.target.elements.shop.value = ''
+      e.target.elements.shop.value = this.props.selectedShop ? this.props.selectedShop : ''
     }
     e.target.elements.option.focus()
+  }
+  handleShopChange = () => {
+    if (this.props.selectedShop) {
+      document.getElementById('shop').value = this.props.selectedShop
+    } 
   }
   render() {
     return (
@@ -27,7 +32,7 @@ export default class AddOption extends React.Component {
         {this.state.error && <p className="add-option-error">{this.state.error}</p>}
         <form className="add-option" onSubmit={this.handleAddOption}>
           <input className="add-option__input" type="text" name="option" placeholder={this.props.itemPlaceholder} />
-          <input className="add-option__input" type="text" name="shop" placeholder={this.props.shopPlaceholder} value={this.props.selectedShop && this.props.selectedShop} />
+          <input className="add-option__input" type="text" id="shop" name="shop" onChange={this.handleShopChange} defaultValue={this.props.selectedShop ? this.props.selectedShop : ''} placeholder={this.props.shopPlaceholder} />
           <button className="button">{this.props.addItemText}</button>
         </form>        
       </div>

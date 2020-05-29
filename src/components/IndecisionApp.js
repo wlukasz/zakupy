@@ -173,6 +173,7 @@ export default class IndecisionApp extends React.Component {
     this.setState(() => ({ selectedShop: shopToShow }), () => {
       if (!this.state.selected) {
         this.setAllTicks(this.state.options, this.state.selectedShop)
+        document.getElementById('shop').value = shopToShow
       }
     })
   }
@@ -185,6 +186,8 @@ export default class IndecisionApp extends React.Component {
     }
   }
   handleAddOption = ({ option, shop }) => {
+    const item = option.toLowerCase()
+    const where = shop.toLowerCase() || this.state.language.elsewhere
     if (!option) {
       return this.state.language.addOptionMsg1
     } else if (this.state.options.find(({ option, shop }) => {
@@ -193,8 +196,6 @@ export default class IndecisionApp extends React.Component {
       return this.state.language.addOptionMsg2
     }
     
-    const item = option.toLowerCase()
-    const where = shop.toLowerCase() || this.state.language.elsewhere
     const newOptions = this.state.options.concat([{ option: item, shop: where, checked: true }])
 
     this.resetShops(newOptions, true)
