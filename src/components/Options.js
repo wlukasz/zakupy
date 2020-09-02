@@ -10,6 +10,7 @@ const Options = (props) => {
     <OptionsHeader 
       lang={props.lang}
       selected={props.selected}
+      optionsLength={props.options.length}
       uniqueShops={props.uniqueShops}
       handleToggleView={props.handleToggleView}
       handleDeleteOptions={props.handleDeleteOptions}

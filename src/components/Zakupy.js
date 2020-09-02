@@ -3,7 +3,7 @@ import AddOption from './AddOption'
 import Header from './Header'
 import Options from './Options'
 
-export default class IndecisionApp extends React.Component {
+export default class Zakupy extends React.Component {
   constructor(props) {
     super(props)
     this.filterShop = this.filterShop.bind(this)
@@ -239,7 +239,7 @@ export default class IndecisionApp extends React.Component {
           this.setAllTicks(options)
         }
       }
-  } catch (error) {
+    } catch (error) {
       // Do nothing - default will be used
     }
     try {

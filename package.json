@@ -1,5 +1,5 @@
 {
-  "name": "indecision-app",
+  "name": "zakupy",
   "version": "1.0.0",
   "main": "app.js",
   "author": "Wojciech Lukaszewicz",
@@ -8,7 +8,8 @@
     "serve": "live-server public/",
     "build-dev": "webpack --mode=development --watch",
     "build-prod": "webpack -p --env production",
-    "start": "node server.js",
+    "start-watch": "nodemon server/server.js",
+    "start": "node server/server.js",
     "heroku-postbuild": "webpack -p"
   },
   "dependencies": {
@@ -30,6 +31,7 @@
     "sass-loader": "^8.0.0",
     "style-loader": "^1.0.0",
     "validator": "^11.1.0",
+    "webfontloader": "^1.6.28",
     "webpack": "^4.41.0",
     "webpack-dev-server": "^3.8.1"
   },

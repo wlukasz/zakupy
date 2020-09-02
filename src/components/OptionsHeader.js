@@ -46,7 +46,7 @@ const OptionsHeader = (props) => {
           filterShop={props.filterShop}
           allShops={props.lang.allShops} 
         /> 
-        {!props.selected && 
+        {!props.selected && props.optionsLength > 0 &&
           <div>
             <button
               className="button button--link"  
