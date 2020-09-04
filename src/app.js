@@ -9,7 +9,7 @@ WebFont.load({
   google: {
     families: ['Roboto Condensed:300,400,700', 'sans-serif'],
     // families: ['Roboto:100,200,300,400,500,700,900', 'sans-serif']
-  }
+  },
 })
 
 ReactDOM.render(<Zakupy />, document.querySelector('#app'))

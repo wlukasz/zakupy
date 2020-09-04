@@ -1,65 +1,106 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import ShopSelector from './ShopSelector'
 
 const OptionsHeader = (props) => {
-  return (
-  <div>
-    <div className="options-header">
-      <button
-        className="button button--link"  
-        onClick={props.handleToggleView}
-      >
-        {props.selected ? props.lang.allItems : props.lang.thisShoppingTrip}
-      </button>
+  const {
+    allTicked,
+    handleToggleView,
+    lang,
+    selected,
+    handleToggleTicks,
+    undoItem,
+    optionsLength,
+    uniqueShops,
+    filterShop,
+    handleDeleteOptions,
+    undoLength,
+  } = props
 
-      {!props.selected ? 
-        <div>
-          <button
-            className="button button--link button--link-mod"  
-            onClick={props.handleToggleTicks}
-          >
-            <input 
-              id="toggleall"
-              className="chkbox"
-              type="checkbox"
-              onChange={props.handleToggleTicks}
-            />
-            <label className="header-checkbox" htmlFor="toggleall">{props.lang.toggleTicks}</label>
-          </button>
-        </div>
-        :
-        <div>
-          {props.undoLength > 0 &&
-          <button
-            className="button button--link"  
-            onClick={props.undoItem}
-          >
-            {props.lang.undoItem}
-          </button>
-          }
-        </div>
-      }
-      
-      <div>
-        <ShopSelector 
-          uniqueShops={props.uniqueShops}
-          filterShop={props.filterShop}
-          allShops={props.lang.allShops} 
-        /> 
-        {!props.selected && props.optionsLength > 0 &&
+  useEffect(() => {
+    if (!selected) {
+      document.getElementById('toggleall').checked = allTicked
+    }
+  }, [allTicked])
+
+  return (
+    <div>
+      <div className="options-header">
+        <button
+          type="button"
+          className="button button--link"
+          onClick={handleToggleView}
+        >
+          {selected ? lang.allItems : lang.thisShoppingTrip}
+        </button>
+
+        {!selected ? (
           <div>
             <button
-              className="button button--link"  
-              onClick={props.handleDeleteOptions}
+              type="button"
+              className="button button--link button--link-mod"
+              onClick={handleToggleTicks}
             >
-              {props.lang.removeAll}
+              <input
+                id="toggleall"
+                className="chkbox"
+                type="checkbox"
+                onChange={handleToggleTicks}
+              />
+              <label className="header-checkbox" htmlFor="toggleall">
+                {lang.toggleTicks}
+              </label>
             </button>
           </div>
-        }
+        ) : (
+          <div>
+            {undoLength > 0 && (
+              <button
+                type="button"
+                className="button button--link"
+                onClick={undoItem}
+              >
+                {lang.undoItem}
+              </button>
+            )}
+          </div>
+        )}
+
+        <div>
+          <ShopSelector
+            uniqueShops={uniqueShops}
+            filterShop={filterShop}
+            allShops={lang.allShops}
+          />
+          {!selected && optionsLength > 0 && (
+            <div>
+              <button
+                type="button"
+                className="button button--link"
+                onClick={handleDeleteOptions}
+              >
+                {lang.removeAll}
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
-  </div>
   )
+}
+
+OptionsHeader.propTypes = {
+  allTicked: PropTypes.bool.isRequired,
+  handleToggleView: PropTypes.func.isRequired,
+  lang: PropTypes.objectOf(PropTypes.string).isRequired,
+  selected: PropTypes.bool.isRequired,
+  handleToggleTicks: PropTypes.func.isRequired,
+  undoItem: PropTypes.func.isRequired,
+  optionsLength: PropTypes.number.isRequired,
+  uniqueShops: PropTypes.arrayOf(PropTypes.string).isRequired,
+  filterShop: PropTypes.func.isRequired,
+  handleDeleteOptions: PropTypes.func.isRequired,
+  undoLength: PropTypes.number.isRequired,
 }
 
 export default OptionsHeader
