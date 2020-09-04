@@ -2,12 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import LingoFlags from './LingoFlags'
 
-const Header = ({ shopping, subTitle, handleSetLingo }) => (
+const Header = ({ selectedLingo, shopping, subTitle, handleSetLingo }) => (
   <div className="header">
     <div className="container header__flex">
       <h1 className="header__title">{shopping}</h1>
       {subTitle && <h2 className="header__subtitle">{subTitle}</h2>}
-      <LingoFlags handleSetLingo={handleSetLingo} />
+      <LingoFlags
+        selectedLingo={selectedLingo}
+        handleSetLingo={handleSetLingo}
+      />
     </div>
   </div>
 )
@@ -18,6 +21,7 @@ Header.defaultProps = {
 }
 
 Header.propTypes = {
+  selectedLingo: PropTypes.string.isRequired,
   shopping: PropTypes.string,
   subTitle: PropTypes.string,
   handleSetLingo: PropTypes.func.isRequired,

@@ -4,13 +4,18 @@ import en from '../../public/images/United_Kingdom.png'
 import pl from '../../public/images/Poland.png'
 
 const LingoFlags = (props) => {
-  const { handleSetLingo } = props
+  const { selectedLingo, handleSetLingo } = props
 
   return (
     <div>
       <button
         type="button"
         className="button button--link"
+        style={
+          selectedLingo === 'en'
+            ? { border: 'solid 1px white', borderRadius: '3px' }
+            : { border: 'none' }
+        }
         title="English"
         onClick={() => {
           handleSetLingo('en')
@@ -21,6 +26,11 @@ const LingoFlags = (props) => {
       <button
         type="button"
         className="button button--link"
+        style={
+          selectedLingo === 'pl'
+            ? { border: 'solid 1px white', borderRadius: '3px' }
+            : { border: 'none' }
+        }
         title="polski"
         onClick={() => {
           handleSetLingo('pl')
@@ -33,6 +43,7 @@ const LingoFlags = (props) => {
 }
 
 LingoFlags.propTypes = {
+  selectedLingo: PropTypes.string.isRequired,
   handleSetLingo: PropTypes.func.isRequired,
 }
 

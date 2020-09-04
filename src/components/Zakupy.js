@@ -329,19 +329,21 @@ export default class Zakupy extends React.Component {
 
   render() {
     const {
-      options,
       allTicked,
       language,
+      options,
       selected,
-      uniqueShops,
+      selectedLingo,
       selectedShop,
       undoQueue,
+      uniqueShops,
     } = this.state
     const subTitle = ''
 
     return (
       <div>
         <Header
+          selectedLingo={selectedLingo}
           subTitle={subTitle}
           shopping={language.shopping}
           handleSetLingo={this.handleSetLingo}
