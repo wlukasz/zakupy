@@ -10,6 +10,7 @@
     "build-dev": "webpack --mode=development --watch",
     "build-prod": "webpack -p --env production",
     "start-watch": "nodemon server/server.js",
+    "firebase-deploy": "firebase deploy",
     "start": "node server/server.js",
     "heroku-postbuild": "webpack -p"
   },

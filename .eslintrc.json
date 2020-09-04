@@ -17,14 +17,15 @@
   },
   "plugins": ["prettier", "react"],
   "rules": {
+    "class-methods-use-this": "off",
+    "func-names": "off",
+    "import/no-named-as-default": 0,
+    "linebreak-style": ["error", "windows"],
+    "no-console": "off",
+    "no-process-exit": "off",
+    "no-unused-vars": "warn",
     "prettier/prettier": "error",
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    "semi": [2, "never"],
-    "linebreak-style": ["error", "windows"],
-    "no-unused-vars": "warn",
-    "func-names": "off",
-    "class-methods-use-this": "off",
-    "no-process-exit": "off",
-    "no-console": "off"
+    "semi": [2, "never"]
   }
 }
