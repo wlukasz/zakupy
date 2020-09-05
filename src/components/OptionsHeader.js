@@ -66,14 +66,16 @@ const OptionsHeader = (props) => {
           </div>
         )}
 
-        <div>
-          <ShopSelector
-            uniqueShops={uniqueShops}
-            filterShop={filterShop}
-            allShops={lang.allShops}
-          />
+        <div className="flex-column-space-between">
+          <div style={{ margin: '5px' }}>
+            <ShopSelector
+              uniqueShops={uniqueShops}
+              filterShop={filterShop}
+              allShops={lang.allShops}
+            />
+          </div>
           {!selected && optionsLength > 0 && (
-            <div>
+            <div style={{ margin: 'auto 5px' }}>
               <button
                 type="button"
                 className="button button--link"
