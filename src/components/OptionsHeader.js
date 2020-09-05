@@ -67,7 +67,7 @@ const OptionsHeader = (props) => {
         )}
 
         <div className="flex-column-space-between">
-          <div style={{ margin: '5px' }}>
+          <div style={{ margin: 'auto 5px' }}>
             <ShopSelector
               uniqueShops={uniqueShops}
               filterShop={filterShop}
@@ -75,15 +75,14 @@ const OptionsHeader = (props) => {
             />
           </div>
           {!selected && optionsLength > 0 && (
-            <div style={{ margin: 'auto 5px' }}>
-              <button
-                type="button"
-                className="button button--link"
-                onClick={handleDeleteOptions}
-              >
-                {lang.removeAll}
-              </button>
-            </div>
+            <button
+              type="button"
+              className="button button--link"
+              style={{ margin: 'auto' }}
+              onClick={handleDeleteOptions}
+            >
+              {lang.removeAll}
+            </button>
           )}
         </div>
       </div>
