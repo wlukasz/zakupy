@@ -18,7 +18,7 @@ const LingoFlags = (props) => {
               className="button button--link"
               style={
                 selectedLingo === key
-                  ? { border: 'solid 1px white', borderRadius: '3px' }
+                  ? { border: 'solid 1px #3c4251', borderRadius: '50%' }
                   : { border: 'none' }
               }
               title={supportedLocales[key].name}
